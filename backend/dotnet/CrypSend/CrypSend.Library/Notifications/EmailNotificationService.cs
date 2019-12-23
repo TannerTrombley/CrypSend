@@ -7,7 +7,12 @@ namespace CrypSend.Library.Notifications
 {
     public class EmailNotificationService : INotificationService
     {
-        public Task SendAsync(string message)
+        public EmailNotificationService()
+        {
+
+        }
+
+        public Task SendAsync(string recipient, string message)
         {
             throw new NotImplementedException();
         }

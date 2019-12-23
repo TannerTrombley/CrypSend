@@ -2,7 +2,7 @@
 
 namespace CrypSend.Library
 {
-    public class EncyptionEngineFactory : IEncryptionEngineFactory
+    public class EncryptionEngineFactory : IEncryptionEngineFactory
     {
         public IEncryptionEngine GetEncryptionEngine(EncryptionType type)
         {

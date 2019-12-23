@@ -4,6 +4,6 @@ namespace CrypSend.Library.Notifications
 {
     public interface INotificationService
     {
-        Task SendAsync(string message);
+        Task SendAsync(string recipient, string message);
     }
 }

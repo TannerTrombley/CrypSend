@@ -10,7 +10,6 @@ namespace CrypSend.Library
 
         public Guid KeyId { get; set; }
 
-        [EntityJsonPropertyConverter]
         public byte[] EncryptedPayload { get; set; }
 
         [EntityJsonPropertyConverter]

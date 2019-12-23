@@ -38,7 +38,7 @@ namespace CrypSend.Repository
 
         public Task<T> GetDocumentAsync(string id, string partitionKey)
         {
-            var operation = TableOperation.Retrieve(partitionKey, id);
+            var operation = TableOperation.Retrieve<T>(partitionKey, id);
             return ExecuteInternalAsync(operation, "Get");
         }
 
@@ -51,7 +51,7 @@ namespace CrypSend.Repository
             }
             else
             {
-                throw new RepositoryException($"Faild to {operationName} Document");
+                throw new RepositoryException($"Failed to {operationName} Document");
             }
         }
 
