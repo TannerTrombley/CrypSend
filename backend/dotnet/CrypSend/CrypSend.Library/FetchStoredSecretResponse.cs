@@ -9,5 +9,7 @@ namespace CrypSend.Library
         public string PlainText { get; set; }
 
         public bool RequireVerification { get; set; }
+
+        public IEnumerable<RetrievalCondition> Conditions { get; set; }
     }
 }

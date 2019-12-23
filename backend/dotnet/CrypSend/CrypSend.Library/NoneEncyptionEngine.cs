@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CrypSend.Library
 {
     public class NoneEncyptionEngine : IEncryptionEngine
     {
-        public string Decrypt(byte[] encryptedPayload, Dictionary<string, object> properties)
+
+        public Task<string> DecryptAsync(SecretPayload secret)
         {
-            return Encoding.UTF8.GetString(encryptedPayload);
+            return Task.FromResult(Encoding.UTF8.GetString(secret.EncryptedPayload));
         }
 
-        public byte[] Encrypt(string plaintext)
+        public Task<byte[]> EncryptAsync(string plaintext)
         {
-            return Encoding.UTF8.GetBytes(plaintext);
+            return Task.FromResult(Encoding.UTF8.GetBytes(plaintext));
         }
     }
 }

@@ -7,7 +7,7 @@ namespace CrypSend.Library
 {
     public interface ICrypSendService
     {
-        Task StoreSecretAsync(string plaintext);
+        Task<StoreSecretResponse> StoreSecretAsync(StoreSecretRequest request);
 
         Task<FetchStoredSecretResponse> FetchStoredSecretAsync(string id);
     }

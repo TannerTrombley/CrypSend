@@ -17,11 +17,17 @@ namespace CrypSend.Functions
         private readonly ILogger<Function1> log;
         private readonly IRepository<SecretPayload> _secretPayloadRepository;
         private readonly IEncryptionEngineFactory _factory;
-        public Function1(ILogger<Function1> logger, IRepository<SecretPayload> repo, IEncryptionEngineFactory factory)
+        private readonly ICrypSendService _crypSendService;
+        public Function1(
+            ILogger<Function1> logger,
+            IRepository<SecretPayload> repo,
+            IEncryptionEngineFactory factory,
+            ICrypSendService crypSendService)
         {
             log = logger;
             _secretPayloadRepository = repo;
             _factory = factory;
+            _crypSendService = crypSendService;
         }
 
         [FunctionName("Function1")]
@@ -36,7 +42,7 @@ namespace CrypSend.Functions
             {
                 RowKey = "Test123",
                 PartitionKey = "Test123",
-                EncryptedPayload = engine.Encrypt("PLAINTEXTVALUE")
+                EncryptedPayload = await engine.EncryptAsync("PLAINTEXTVALUE")
             };
 
             await _secretPayloadRepository.UpsertDocumentAsync(secret);
@@ -54,9 +60,30 @@ namespace CrypSend.Functions
 
             var secret = await _secretPayloadRepository.GetDocumentAsync("Test123", "Test123");
 
-            var plaintext = engine.Decrypt(secret.EncryptedPayload, null);
+            var plaintext = await engine.DecryptAsync(secret);
 
             return new OkObjectResult($"Great job, Tanner: {plaintext}");
+        }
+
+        [FunctionName("storesecret")]
+        public async Task<IActionResult> RunStoreAsync(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "secrets")] HttpRequest req)
+        {
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            var data = JsonConvert.DeserializeObject<StoreSecretRequest>(requestBody);
+
+            var result = await _crypSendService.StoreSecretAsync(data);
+
+            return new OkObjectResult(result);
+        }
+
+        [FunctionName("getsecret")]
+        public async Task<IActionResult> RunGetAsync(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "secrets/{id}")] HttpRequest req, string id)
+        {
+            var result = await _crypSendService.FetchStoredSecretAsync(id);
+
+            return new OkObjectResult(result);
         }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CrypSend.Library
 {
     public interface IEncryptionEngine
     {
-        byte[] Encrypt(string plaintext);
+        Task<byte[]> EncryptAsync(string plaintext);
 
-        string Decrypt(byte[] encryptedPayload, Dictionary<string, object> properties);
+        Task<string> DecryptAsync(SecretPayload secret);
     }
 }

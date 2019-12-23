@@ -1,5 +1,7 @@
-﻿using System;
+﻿using CrypSend.Repository;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,20 +10,62 @@ namespace CrypSend.Library
     public class CrypSendService : ICrypSendService
     {
         private readonly IEncryptionEngineFactory _encryptionEngineFactory;
+        private readonly IRepository<SecretPayload> _secretRepository;
 
-        public CrypSendService(IEncryptionEngineFactory encryptionEngineFactory)
+        public CrypSendService(
+            IEncryptionEngineFactory encryptionEngineFactory,
+            IRepository<SecretPayload> secretRepository)
         {
             _encryptionEngineFactory = encryptionEngineFactory;
+            _secretRepository = secretRepository;
         }
 
-        public Task<FetchStoredSecretResponse> FetchStoredSecretAsync(string id)
+        public async Task<FetchStoredSecretResponse> FetchStoredSecretAsync(string id)
         {
-            throw new NotImplementedException();
+            var secret = await _secretRepository.GetDocumentAsync(id, id);
+
+            var engine = _encryptionEngineFactory.GetEncryptionEngine(secret.EncryptionType);
+
+            // Check for any conditions not met
+            if (secret?.RetrievalConditions?.Any(condition => !condition.HasMetCondition) == true)
+            {
+                return new FetchStoredSecretResponse()
+                {
+                    RequireVerification = true,
+                    Conditions = secret.RetrievalConditions,
+                    PlainText = null
+                };
+            }
+
+            return new FetchStoredSecretResponse()
+            {
+                PlainText = await engine.DecryptAsync(secret),
+                RequireVerification = false,
+                Conditions = null
+            };
         }
 
-        public Task StoreSecretAsync(string plaintext)
+        public async Task<StoreSecretResponse> StoreSecretAsync(StoreSecretRequest request)
         {
-            throw new NotImplementedException();
+            var engine = _encryptionEngineFactory.GetEncryptionEngine(request.EncryptionType);
+
+            var secretId = Guid.NewGuid();
+            var secret = new SecretPayload()
+            {
+                RowKey = secretId.ToString(),
+                PartitionKey = secretId.ToString(),
+                EncryptionType = request.EncryptionType,
+                EncryptedPayload = await engine.EncryptAsync(request.PlainText),
+                Contacts = request.Contacts,
+                RetrievalConditions = request.RetrievalConditions
+            };
+
+            await _secretRepository.UpsertDocumentAsync(secret);
+
+            return new StoreSecretResponse()
+            {
+                SecretId = secretId.ToString()
+            };
         }
     }
 }
