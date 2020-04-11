@@ -18,5 +18,8 @@ namespace CrypSend.Library
 
         [EntityJsonPropertyConverter]
         public IEnumerable<RetrievalCondition> RetrievalConditions { get; set; }
+
+        [EntityJsonPropertyConverter]
+        public Contact NotificationLocation { get; set; }
     }
 }

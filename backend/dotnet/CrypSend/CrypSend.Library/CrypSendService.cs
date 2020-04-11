@@ -1,8 +1,6 @@
 ﻿using CrypSend.Repository;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CrypSend.Library
@@ -57,7 +55,8 @@ namespace CrypSend.Library
                 EncryptionType = request.EncryptionType,
                 EncryptedPayload = await engine.EncryptAsync(request.PlainText),
                 Contacts = request.Contacts,
-                RetrievalConditions = request.RetrievalConditions
+                RetrievalConditions = request.RetrievalConditions,
+                NotificationLocation = request.NotificationLocation
             };
 
             await _secretRepository.UpsertDocumentAsync(secret);

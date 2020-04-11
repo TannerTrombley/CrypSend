@@ -13,5 +13,7 @@ namespace CrypSend.Library
         public EncryptionType EncryptionType { get; set; }
 
         public IEnumerable<Contact> Contacts { get; set; }
+
+        public Contact NotificationLocation { get; set; }
     }
 }

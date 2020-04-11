@@ -7,5 +7,7 @@ namespace CrypSend.Library
     public class StoreSecretResponse
     {
         public string SecretId { get; set; }
+
+        public string SecretLocation { get; set; }
     }
 }

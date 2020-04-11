@@ -16,5 +16,7 @@ namespace CrypSend.Library
         public bool HasMetCondition { get; set; }
 
         public RetrievalConditionType Type { get; set; }
+
+        public Contact Destination { get; set; }
     }
 }
