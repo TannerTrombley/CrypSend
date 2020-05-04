@@ -10,6 +10,6 @@ namespace CrypSend.Library
 
         public bool RequireVerification { get; set; }
 
-        public IEnumerable<RetrievalCondition> Conditions { get; set; }
+        public bool TooManyAttempts { get; set; } = false;
     }
 }

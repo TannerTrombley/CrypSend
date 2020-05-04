@@ -6,10 +6,15 @@ namespace CrypSend.Library.Notifications
 {
     public class NotificationQueueItem
     {
-        public Contact Destination { get; set; }
+        public string Destination { get; set; }
 
         public string SecretLocation { get; set; }
 
         public string SecretId { get; set; }
+
+        public NotificationType Type { get; set; }
+
+        public string Payload { get; set; }
+
     }
 }

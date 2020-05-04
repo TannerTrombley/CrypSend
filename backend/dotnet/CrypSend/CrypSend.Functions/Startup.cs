@@ -7,6 +7,8 @@ using CrypSend.Repository;
 using CrypSend.Library;
 using Microsoft.Extensions.Configuration;
 using CrypSend.Library.Settings;
+using CrypSend.Library.SecretMetadata;
+using CrypSend.Library.OneTimePassword;
 
 [assembly: FunctionsStartup(typeof(CrypSend.Functions.Startup))]
 
@@ -21,8 +23,12 @@ namespace CrypSend.Functions
             builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddSingleton<IRepository<SecretPayload>, SecretPayloadRepository>();
+            builder.Services.AddSingleton<IRepository<SecretMetadataDocument>, SecretMetadataRepository>();
+
             builder.Services.AddScoped<ICrypSendService, CrypSendService>();
             builder.Services.AddSingleton<IEncryptionEngineFactory, EncryptionEngineFactory>();
+
+            builder.Services.AddTransient<IOneTimePasswordGenerator, OneTimePasswordGenerator>();
         }
     }
 }

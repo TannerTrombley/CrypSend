@@ -9,17 +9,12 @@ namespace CrypSend.Library
         [EntityJsonPropertyConverter]
         public EncryptionType EncryptionType { get; set; }
 
-        public Guid KeyId { get; set; }
+        public Guid MetadataId { get; set; }
 
         public byte[] EncryptedPayload { get; set; }
 
-        [EntityJsonPropertyConverter]
-        public IEnumerable<Contact> Contacts { get; set; }
+        public bool IsLocked { get; set; } = true;
 
-        [EntityJsonPropertyConverter]
-        public IEnumerable<RetrievalCondition> RetrievalConditions { get; set; }
-
-        [EntityJsonPropertyConverter]
-        public Contact NotificationLocation { get; set; }
+        public int Attempts { get; set; }
     }
 }

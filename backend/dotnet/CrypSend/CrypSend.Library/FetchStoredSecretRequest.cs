@@ -4,12 +4,10 @@ using System.Text;
 
 namespace CrypSend.Library
 {
-    public class StoreSecretResponse
+    public class FetchStoredSecretRequest
     {
         public string SecretId { get; set; }
 
-        public string SecretLocation { get; set; }
-
-        public string OneTimePasscode { get; set; }
+        public string OneTimePass { get; set; }
     }
 }

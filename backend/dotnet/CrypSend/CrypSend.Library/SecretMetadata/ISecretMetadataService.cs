@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CrypSend.Library
+namespace CrypSend.Library.SecretMetadata
 {
-    public interface ISecretPayloadRepository
+    public interface ISecretMetadataService
     {
-
     }
 }

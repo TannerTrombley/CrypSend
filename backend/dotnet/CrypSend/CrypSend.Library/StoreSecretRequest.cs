@@ -8,12 +8,6 @@ namespace CrypSend.Library
     {
         public string PlainText { get; set; }
 
-        public IEnumerable<RetrievalCondition> RetrievalConditions { get; set; }
-
-        public EncryptionType EncryptionType { get; set; }
-
-        public IEnumerable<Contact> Contacts { get; set; }
-
-        public Contact NotificationLocation { get; set; }
+        public string NotificationDestination { get; set; }
     }
 }

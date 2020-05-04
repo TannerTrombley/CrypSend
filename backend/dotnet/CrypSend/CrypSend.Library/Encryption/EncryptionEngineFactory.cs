@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CrypSend.Library.Encryption;
+using System;
 
 namespace CrypSend.Library
 {
@@ -10,6 +11,8 @@ namespace CrypSend.Library
             {
                 case EncryptionType.None:
                     return new NoneEncyptionEngine();
+                case EncryptionType.OneTimePad:
+                    return new OneTimePadEncryptionEngine();
                 default:
                     throw new ArgumentException($"No Encryption Engine to handle {type.ToString()}");
             }
