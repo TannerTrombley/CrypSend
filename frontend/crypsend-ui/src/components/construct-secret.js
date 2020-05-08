@@ -8,7 +8,7 @@ import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { TextField } from '@material-ui/core';
+import { TextField, CircularProgress } from '@material-ui/core';
 import { debounce } from "debounce";
 import { backendHost } from "../common"
 
@@ -20,7 +20,8 @@ export default class SecretConstructor extends React.Component {
             email: null,
             secret: null,
             activeStep: 0,
-            otp: null
+            otp: null,
+            isLoading: false
         }
     }
 
@@ -33,6 +34,7 @@ export default class SecretConstructor extends React.Component {
     }
 
     submit = async () => {
+        this.setState({ isLoading: true });
         let url = backendHost() + "secrets";
         let payload = {
             plainText: this.state.secret,
@@ -46,13 +48,13 @@ export default class SecretConstructor extends React.Component {
             console.log(data);
             let respBody = await data.json();
             console.log(respBody);
-            this.setState({ otp: respBody.oneTimePasscode });
+            this.setState({ otp: respBody.oneTimePasscode, isLoading: false });
         });
         this.setState({ activeStep: this.state.activeStep + 1 });
     };
 
     getSteps() {
-        return ['Enter the email of the person you want to send a secret to', 'Enter the secret to send', 'Send the secret.'];
+        return ['Enter the email of the person you want to send a secret to.', 'Enter the secret to send.', 'Send the secret.'];
     }
 
     getStepContent(step) {
@@ -125,13 +127,14 @@ export default class SecretConstructor extends React.Component {
                                         >
                                             Back
                                     </Button>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={this.state.activeStep === steps.length - 1 ? this.submit : this.handleNext}
-                                        >
-                                            {this.state.activeStep === steps.length - 1 ? 'Submit & Send' : 'Next'}
-                                        </Button>
+                                        {this.state.isLoading == true ? <CircularProgress /> :
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={this.state.activeStep === steps.length - 1 ? this.submit : this.handleNext}
+                                            >
+                                                {this.state.activeStep === steps.length - 1 ? 'Submit & Send' : 'Next'}
+                                            </Button>}
                                     </div>
                                 </div>
                             </StepContent>

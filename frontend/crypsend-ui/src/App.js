@@ -19,10 +19,10 @@ function App() {
 
 
         <Switch>
-          <Route path="/:id" component={PleaseWork}>
+          <Route path="/:id" component={renderSecretRetriever}>
           </Route>
           <Route path="/">
-            <Layout children={Home()} />
+            <Layout children={renderSecretConstructor()} />
           </Route>
         </Switch>
       </div>
@@ -30,11 +30,11 @@ function App() {
   );
 }
 
-function Home() {
+function renderSecretConstructor() {
   return <SecretConstructor />;
 }
 
-const PleaseWork = ({ match }) => {
+const renderSecretRetriever = ({ match }) => {
   return (<Layout children={<SecretRetriever secretId={match.params.id} />} />);
 }
 
